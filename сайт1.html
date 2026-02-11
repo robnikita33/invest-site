@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InvestYouth 2026 — Путь к капиталу</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --bg: #fdfdfd;
+            --accent: #0071e3;
+            --text: #1d1d1f;
+            --card-bg: #ffffff;
+            --success: #2ecc71;
+            --danger: #e74c3c;
+            --transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        nav {
+            position: fixed;
+            top: 0; width: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            display: flex;
+            justify-content: center;
+            padding: 18px 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        nav a {
+            margin: 0 20px;
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 500;
+            font-size: 0.9rem;
+            opacity: 0.5;
+            transition: var(--transition);
+        }
+
+        nav a:hover, nav a.active { opacity: 1; color: var(--accent); }
+
+        .page {
+            display: none;
+            padding: 120px 20px 80px;
+            max-width: 800px;
+            margin: 0 auto;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .page.active {
+            display: block;
+            animation: slideUp 0.6s forwards;
+        }
+
+        @keyframes slideUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 { font-size: 3rem; font-weight: 600; letter-spacing: -1.5px; margin-bottom: 15px; line-height: 1.1; }
+        .subtitle { color: #86868b; font-size: 1.25rem; margin-bottom: 50px; }
+
+        .card {
+            background: var(--card-bg);
+            padding: 35px;
+            border-radius: 30px;
+            margin-bottom: 25px;
+            border: 1px solid #f2f2f2;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.02);
+        }
+
+        .company-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px;
+            background: #f5f5f7;
+            border-radius: 20px;
+            margin-bottom: 12px;
+        }
+
+        .status {
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+        .status-up { background: #e8f5e9; color: var(--success); }
+        .status-down { background: #ffebee; color: var(--danger); }
+
+        .input-box {
+            width: 100%; padding: 18px; margin: 10px 0 20px;
+            border-radius: 15px; border: 1px solid #d2d2d7;
+            font-size: 1.1rem; box-sizing: border-box;
+        }
+        .btn {
+            background: var(--accent); color: white; border: none;
+            padding: 18px; border-radius: 15px; width: 100%;
+            font-size: 1.1rem; font-weight: 600; cursor: pointer;
+        }
+
+        canvas { margin-top: 30px; }
+
+        footer { text-align: center; color: #86868b; padding: 60px 20px; }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="javascript:void(0)" onclick="nav('home')" id="l-home" class="active">Главная</a>
+    <a href="javascript:void(0)" onclick="nav('steps')" id="l-steps">Инструкция</a>
+    <a href="javascript:void(0)" onclick="nav('market')" id="l-market">Компании</a>
+</nav>
+
+<section id="home" class="page active">
+    <h1>Время важнее,<br>чем деньги.</h1>
+    <p class="subtitle">График наглядно покажет, как твои накопления ускоряются с каждым годом.</p>
+    
+    <div class="card">
+        <h3>Твой будущий капитал</h3>
+        <input type="number" id="m_sum" class="input-box" value="3000" oninput="calc()">
+        <input type="number" id="m_years" class="input-box" value="10" oninput="calc()">
+        <h2 id="m_res" style="text-align: center; color: var(--accent); margin-top: 20px;">~630 000 ₽</h2>
+        
+        <canvas id="growthChart"></canvas>
+    </div>
+</section>
+
+<section id="steps" class="page">
+    <h1>Как начать.</h1>
+    <div class="card">
+        <h4>1. Брокер и Паспорт</h4>
+        <p>С 14 лет ты можешь открыть счет у крупных брокеров (Т-Банк, Сбер) при наличии паспорта РФ.</p>
+    </div>
+    <div class="card">
+        <h4>2. Согласие родителей</h4>
+        <p>Это обязательно. Обычно родителю нужно просто нажать кнопку подтверждения в своем приложении.</p>
+    </div>
+</section>
+
+<section id="market" class="page">
+    <h1>Разбор рынка.</h1>
+    <div class="company-item">
+        <div><strong>Яндекс (YDEX)</strong><br><small>IT и поиск</small></div>
+        <span class="status status-up">Рост</span>
+    </div>
+    <div class="company-item">
+        <div><strong>Сбер (SBER)</strong><br><small>Главный банк</small></div>
+        <span class="status status-up">Дивиденды</span>
+    </div>
+    <div class="company-item">
+        <div><strong>Газпром (GAZP)</strong><br><small>Трудный период</small></div>
+        <span class="status status-down">Риски</span>
+    </div>
+</section>
+
+<footer>&copy; 2026 Юный Инвестор</footer>
+
+<script>
+    let chart;
+
+    function nav(id) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        document.getElementById('l-' + id).classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function calc() {
+        const sum = parseFloat(document.getElementById('m_sum').value) || 0;
+        const years = parseFloat(document.getElementById('m_years').value) || 0;
+        const rate = 0.20; 
+        let total = 0;
+        let data = [];
+        let labels = [];
+
+        for (let i = 1; i <= years; i++) {
+            for (let m = 0; m < 12; m++) {
+                total = (total + sum) * (1 + rate/12);
+            }
+            data.push(Math.round(total));
+            labels.push(`Год ${i}`);
+        }
+
+        document.getElementById('m_res').innerText = `~${Math.round(total).toLocaleString()} ₽`;
+        updateChart(labels, data);
+    }
+
+    function updateChart(labels, data) {
+        const ctx = document.getElementById('growthChart').getContext('2d');
+        if (chart) chart.destroy();
+        
+        chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Твой капитал (₽)',
+                    data: data,
+                    borderColor: '#0071e3',
+                    backgroundColor: 'rgba(0, 113, 227, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    borderWidth: 3,
+                    pointRadius: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { grid: { display: false } },
+                    y: { grid: { color: '#f0f0f2' } }
+                }
+            }
+        });
+    }
+
+    // Инициализация при загрузке
+    window.onload = calc;
+</script>
+</body>
+</html>
